@@ -7,7 +7,7 @@ app.use(express.json());
 app.get("/api/topics", getTopics);
 app.get("/api", getAll);
 
-app.use((req, res, next) => {
+app.all("*", (req, res, next) => {
   res.status(404).send({ msg: "Endpoint not found!" });
 });
 
