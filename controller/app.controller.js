@@ -2,6 +2,7 @@ const {
   selectTopics,
   readAll,
   selectArticleById,
+  selectArticles,
 } = require("../model/app.model");
 const endpoints = require("../endpoints.json");
 
@@ -32,4 +33,10 @@ const getArticleById = (req, res, next) => {
     .catch(next);
 };
 
-module.exports = { getTopics, getAll, getArticleById };
+const getArticles = (req, res, next) => {
+  selectArticles().then((articles) => {
+    res.status(200).send({ articles });
+  });
+};
+
+module.exports = { getTopics, getAll, getArticleById, getArticles };

@@ -4,6 +4,7 @@ const {
   getTopics,
   getAll,
   getArticleById,
+  getArticles,
 } = require("./controller/app.controller");
 
 app.use(express.json());
@@ -11,6 +12,7 @@ app.use(express.json());
 app.get("/api/topics", getTopics);
 app.get("/api", getAll);
 app.get("/api/articles/:article_id", getArticleById);
+app.get("/api/articles", getArticles);
 
 app.use((err, req, res, next) => {
   switch (err.code) {
