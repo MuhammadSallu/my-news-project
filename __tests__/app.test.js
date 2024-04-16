@@ -4,6 +4,7 @@ const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/index");
 const endpoints = require("../endpoints.json");
+const comments = require("../db/data/test-data/comments");
 
 beforeEach(() => seed(testData));
 
@@ -129,6 +130,44 @@ describe("/api/articles/:article_id/comments", () => {
       .expect(404)
       .then((response) => {
         expect(response.body.msg).toBe("No comments found for this article!");
+      });
+  });
+});
+
+describe("/api/articles/article_id/comments", () => {
+  test("POST: 201 Adds a comment for an article", () => {
+    const userObj = { username: "butter_bridge", body: "This is a comment!" };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(userObj)
+      .expect(201)
+      .then((response) => {
+        expect(typeof response.body.comment.comment_id).toBe("number");
+        expect(typeof response.body.comment.article_id).toBe("number");
+        expect(response.body.comment.author).toBe("butter_bridge");
+        expect(response.body.comment.body).toBe("This is a comment!");
+        expect(typeof response.body.comment.created_at).toBe("string");
+        expect(typeof response.body.comment.votes).toBe("number");
+      });
+  });
+  test("POST: 400 Returns a bad request message if no user is provided", () => {
+    const userObj = { username: "", body: "This is a comment!" };
+    return request(app)
+      .post("/api/articles/5/comments")
+      .send(userObj)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Empty user!");
+      });
+  });
+  test("POST: 400 Returns a bad request message if no body is provided", () => {
+    const userObj = { username: "butter_bridge", body: "" };
+    return request(app)
+      .post("/api/articles/5/comments")
+      .send(userObj)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Empty body!");
       });
   });
 });
