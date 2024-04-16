@@ -38,8 +38,20 @@ const selectCommentsByArticleId = (article_id) => {
       [article_id]
     )
     .then(({ rows }) => {
-      console.log(rows);
       return rows;
+    });
+};
+
+const postCommentByArticleId = (article_id, userObj) => {
+  const user = userObj.username;
+  const body = userObj.body;
+  return db
+    .query(
+      "INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;",
+      [user, body, article_id]
+    )
+    .then(({ rows }) => {
+      return rows[0];
     });
 };
 
@@ -48,4 +60,5 @@ module.exports = {
   selectArticleById,
   selectArticles,
   selectCommentsByArticleId,
+  postCommentByArticleId,
 };

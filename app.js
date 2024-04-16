@@ -6,6 +6,7 @@ const {
   getArticleById,
   getArticles,
   getCommentsByArticleId,
+  addCommentByArticleId,
 } = require("./controller/app.controller");
 
 app.use(express.json());
@@ -15,11 +16,15 @@ app.get("/api", getAll);
 app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
+app.post("/api/articles/:article_id/comments", addCommentByArticleId);
 
 app.use((err, req, res, next) => {
   switch (err.code) {
     case "22P02":
       res.status(400).send({ msg: "Bad request" });
+      break;
+    case "23503":
+      res.status(400).send({ msg: "Empty user!" });
       break;
   }
   next(err);

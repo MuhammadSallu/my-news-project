@@ -1,9 +1,9 @@
 const {
   selectTopics,
-  readAll,
   selectArticleById,
   selectArticles,
   selectCommentsByArticleId,
+  postCommentByArticleId,
 } = require("../model/app.model");
 const endpoints = require("../endpoints.json");
 
@@ -52,10 +52,24 @@ const getCommentsByArticleId = (req, res, next) => {
     .catch(next);
 };
 
+const addCommentByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
+  const userObj = req.body;
+  if (userObj.body.length === 0) {
+    res.status(400).send({ msg: "Empty body!" });
+  }
+  postCommentByArticleId(article_id, userObj)
+    .then((comment) => {
+      res.status(201).send({ comment });
+    })
+    .catch(next);
+};
+
 module.exports = {
   getTopics,
   getAll,
   getArticleById,
   getArticles,
   getCommentsByArticleId,
+  addCommentByArticleId,
 };
