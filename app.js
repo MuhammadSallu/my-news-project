@@ -5,6 +5,7 @@ const {
   getAll,
   getArticleById,
   getArticles,
+  getCommentsByArticleId,
 } = require("./controller/app.controller");
 
 app.use(express.json());
@@ -13,6 +14,7 @@ app.get("/api/topics", getTopics);
 app.get("/api", getAll);
 app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles", getArticles);
+app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 app.use((err, req, res, next) => {
   switch (err.code) {

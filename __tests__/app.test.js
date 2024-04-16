@@ -98,3 +98,37 @@ describe("/api/articles", () => {
       });
   });
 });
+
+describe("/api/articles/:article_id/comments", () => {
+  test("GET:200 Gets all comments with a given article id", () => {
+    return request(app)
+      .get("/api/articles/5/comments")
+      .expect(200)
+      .then((response) => {
+        response.body.comments.forEach((comment) => {
+          expect(typeof comment.comment_id).toBe("number");
+          expect(typeof comment.body).toBe("string");
+          expect(comment.article_id).toBe(5);
+          expect(typeof comment.author).toBe("string");
+          expect(typeof comment.votes).toBe("number");
+          expect(typeof comment.created_at).toBe("string");
+        });
+      });
+  });
+  test("GET:400 If the id is not a valid id type, return the correct error status", () => {
+    return request(app)
+      .get("/api/articles/anarticle/comments")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+  test("GET:404 if the article id doesn't exist returns the correct status and message", () => {
+    return request(app)
+      .get("/api/articles/100/comments")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("No comments found for this article!");
+      });
+  });
+});

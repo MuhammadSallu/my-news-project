@@ -3,6 +3,7 @@ const {
   readAll,
   selectArticleById,
   selectArticles,
+  selectCommentsByArticleId,
 } = require("../model/app.model");
 const endpoints = require("../endpoints.json");
 
@@ -39,4 +40,22 @@ const getArticles = (req, res, next) => {
   });
 };
 
-module.exports = { getTopics, getAll, getArticleById, getArticles };
+const getCommentsByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
+  selectCommentsByArticleId(article_id)
+    .then((comments) => {
+      if (comments.length === 0) {
+        res.status(404).send({ msg: "No comments found for this article!" });
+      }
+      res.status(200).send({ comments });
+    })
+    .catch(next);
+};
+
+module.exports = {
+  getTopics,
+  getAll,
+  getArticleById,
+  getArticles,
+  getCommentsByArticleId,
+};
