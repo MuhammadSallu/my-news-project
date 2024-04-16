@@ -55,10 +55,22 @@ const postCommentByArticleId = (article_id, userObj) => {
     });
 };
 
+const updateArticleVotesById = (article_id, votes) => {
+  return db
+    .query(
+      "UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;",
+      [votes, article_id]
+    )
+    .then(({ rows }) => {
+      return rows[0];
+    });
+};
+
 module.exports = {
   selectTopics,
   selectArticleById,
   selectArticles,
   selectCommentsByArticleId,
   postCommentByArticleId,
+  updateArticleVotesById,
 };

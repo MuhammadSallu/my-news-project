@@ -7,6 +7,7 @@ const {
   getArticles,
   getCommentsByArticleId,
   addCommentByArticleId,
+  patchArticleVotesById,
 } = require("./controller/app.controller");
 
 app.use(express.json());
@@ -17,6 +18,7 @@ app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 app.post("/api/articles/:article_id/comments", addCommentByArticleId);
+app.patch("/api/articles/:article_id", patchArticleVotesById);
 
 app.use((err, req, res, next) => {
   switch (err.code) {

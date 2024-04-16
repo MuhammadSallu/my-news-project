@@ -4,6 +4,7 @@ const {
   selectArticles,
   selectCommentsByArticleId,
   postCommentByArticleId,
+  updateArticleVotesById,
 } = require("../model/app.model");
 const endpoints = require("../endpoints.json");
 
@@ -65,6 +66,19 @@ const addCommentByArticleId = (req, res, next) => {
     .catch(next);
 };
 
+const patchArticleVotesById = (req, res, next) => {
+  const { article_id } = req.params;
+  const votes = req.body.inc_votes;
+  if (Object.keys(req.body).length === 0) {
+    res.status(400).send({ msg: "Bad request" });
+  }
+  updateArticleVotesById(article_id, votes)
+    .then((article) => {
+      res.status(200).send({ article });
+    })
+    .catch(next);
+};
+
 module.exports = {
   getTopics,
   getAll,
@@ -72,4 +86,5 @@ module.exports = {
   getArticles,
   getCommentsByArticleId,
   addCommentByArticleId,
+  patchArticleVotesById,
 };
