@@ -33,8 +33,12 @@ const selectArticles = () => {
 
 const selectCommentsByArticleId = (article_id) => {
   return db
-    .query(`SELECT * FROM comments WHERE article_id = $1;`, [article_id])
+    .query(
+      `SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at desc;`,
+      [article_id]
+    )
     .then(({ rows }) => {
+      console.log(rows);
       return rows;
     });
 };
