@@ -135,7 +135,7 @@ describe("/api/articles/:article_id/comments", () => {
 });
 
 describe("/api/articles/article_id/comments", () => {
-  test("POST: 201 Adds a comment for an article", () => {
+  test("POST:201 Adds a comment for an article", () => {
     const userObj = { username: "butter_bridge", body: "This is a comment!" };
     return request(app)
       .post("/api/articles/3/comments")
@@ -168,6 +168,47 @@ describe("/api/articles/article_id/comments", () => {
       .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("Empty body!");
+      });
+  });
+});
+
+describe("/api/articles/:article_id", () => {
+  test("PATCH:200 Updates an article's votes with the corresponding id and an object with votes then returns updated article", () => {
+    const votesObj = { inc_votes: 15 };
+    return request(app)
+      .patch("/api/articles/4")
+      .send(votesObj)
+      .expect(200)
+      .then((response) => {
+        console.log(response.body);
+        expect(response.body.article.article_id).toBe(4);
+        expect(typeof response.body.article.title).toBe("string");
+        expect(typeof response.body.article.topic).toBe("string");
+        expect(typeof response.body.article.author).toBe("string");
+        expect(typeof response.body.article.body).toBe("string");
+        expect(typeof response.body.article.created_at).toBe("string");
+        expect(typeof response.body.article.article_img_url).toBe("string");
+        expect(response.body.article.votes).toBe(15);
+      });
+  });
+  test("PATCH:400 Gives 400 code if wrong data type is passed with votes", () => {
+    const votesObj = { inc_votes: "ten" };
+    return request(app)
+      .patch("/api/articles/3")
+      .send(votesObj)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+  test("PATCH:400 Gives 400 code if empty object passed", () => {
+    const votesObj = {};
+    return request(app)
+      .patch("/api/articles/3")
+      .send(votesObj)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
       });
   });
 });
