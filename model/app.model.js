@@ -1,5 +1,4 @@
 const db = require("../db/connection");
-const endpoints = require("../endpoints.json");
 
 const selectTopics = () => {
   return db.query("SELECT * FROM topics;").then((result) => {
@@ -7,10 +6,12 @@ const selectTopics = () => {
   });
 };
 
-const readAll = () => {
-  return Promise.resolve(endpoints).then((result) => {
-    return result;
-  });
+const selectArticleById = (article_id) => {
+  return db
+    .query("SELECT * FROM articles WHERE article_id = $1;", [article_id])
+    .then(({ rows }) => {
+      return rows[0];
+    });
 };
 
-module.exports = { selectTopics, readAll };
+module.exports = { selectTopics, selectArticleById };

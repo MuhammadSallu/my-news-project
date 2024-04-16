@@ -1,4 +1,9 @@
-const { selectTopics, readAll } = require("../model/app.model");
+const {
+  selectTopics,
+  readAll,
+  selectArticleById,
+} = require("../model/app.model");
+const endpoints = require("../endpoints.json");
 
 const getTopics = (req, res, next) => {
   selectTopics().then((topics) => {
@@ -7,9 +12,24 @@ const getTopics = (req, res, next) => {
 };
 
 const getAll = (req, res, next) => {
-  readAll().then((endpoints) => {
-    res.status(200).send(endpoints);
+  return Promise.resolve(endpoints).then((result) => {
+    res.status(200).send({ endpoints: result });
   });
 };
 
-module.exports = { getTopics, getAll };
+const getArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+  selectArticleById(article_id)
+    .then((article) => {
+      if (!article) {
+        return Promise.reject({
+          status: 404,
+          msg: "Article doesn't exist!",
+        });
+      }
+      res.status(200).send(article);
+    })
+    .catch(next);
+};
+
+module.exports = { getTopics, getAll, getArticleById };
