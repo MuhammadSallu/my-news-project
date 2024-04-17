@@ -256,3 +256,31 @@ describe("/api/users", () => {
       });
   });
 });
+
+describe("/api/articles?topic=:topic", () => {
+  test("GET:200 Gets all topics with matching topics", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then((response) => {
+        response.body.articles.forEach((article) => {
+          expect(article.topic).toBe("mitch");
+          expect(typeof article.article_id).toBe("number");
+          expect(typeof article.author).toBe("string");
+          expect(typeof article.title).toBe("string");
+          expect(typeof article.created_at).toBe("string");
+          expect(typeof article.votes).toBe("number");
+          expect(typeof article.article_img_url).toBe("string");
+          expect(typeof article.comment_count).toBe("number");
+        });
+      });
+  });
+  test("GET:404 Gives an error if given the wrong but valid topic", () => {
+    return request(app)
+      .get("/api/articles?topic=InvalidTopic")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Topic doesn't exist!");
+      });
+  });
+});

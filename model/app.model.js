@@ -15,16 +15,18 @@ const selectArticleById = (article_id) => {
     });
 };
 
-const selectArticles = () => {
+const selectArticles = (topic) => {
   return db
     .query(
       `SELECT articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, articles.article_img_url,
       COUNT(comments.article_id)::INT AS comment_count
-      FROM articles 
+      FROM articles
       LEFT JOIN comments 
-      ON articles.article_id = comments.article_id 
+      ON articles.article_id = comments.article_id
+      WHERE articles.topic = $1 OR $1::VARCHAR IS NULL
       GROUP BY articles.article_id
-      ORDER BY articles.created_at desc;`
+      ORDER BY articles.created_at desc;`,
+      [topic]
     )
     .then(({ rows }) => {
       return rows;
@@ -76,7 +78,6 @@ const deleteCommentById = (id) => {
 
 const selectAllUsers = () => {
   return db.query("SELECT * FROM users;").then(({ rows }) => {
-    console.log(rows);
     return rows;
   });
 };

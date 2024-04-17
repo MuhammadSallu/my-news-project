@@ -38,9 +38,18 @@ const getArticleById = (req, res, next) => {
 };
 
 const getArticles = (req, res, next) => {
-  selectArticles().then((articles) => {
-    res.status(200).send({ articles });
-  });
+  const { topic } = req.query;
+  selectArticles(topic)
+    .then((articles) => {
+      if (articles.length === 0 && topic) {
+        return Promise.reject({
+          status: 404,
+          msg: "Topic doesn't exist!",
+        });
+      }
+      res.status(200).send({ articles });
+    })
+    .catch(next);
 };
 
 const getCommentsByArticleId = (req, res, next) => {
