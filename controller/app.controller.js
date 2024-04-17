@@ -5,6 +5,7 @@ const {
   selectCommentsByArticleId,
   postCommentByArticleId,
   updateArticleVotesById,
+  deleteCommentById,
 } = require("../model/app.model");
 const endpoints = require("../endpoints.json");
 
@@ -79,6 +80,18 @@ const patchArticleVotesById = (req, res, next) => {
     .catch(next);
 };
 
+const removeCommentById = (req, res, next) => {
+  const { comment_id } = req.params;
+  deleteCommentById(comment_id)
+    .then((result) => {
+      if (result.length === 0) {
+        res.status(404).send({ msg: "Comment not found!" });
+      }
+      res.status(204).send();
+    })
+    .catch(next);
+};
+
 module.exports = {
   getTopics,
   getAll,
@@ -87,4 +100,5 @@ module.exports = {
   getCommentsByArticleId,
   addCommentByArticleId,
   patchArticleVotesById,
+  removeCommentById,
 };
