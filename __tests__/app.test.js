@@ -180,7 +180,6 @@ describe("/api/articles/:article_id", () => {
       .send(votesObj)
       .expect(200)
       .then((response) => {
-        console.log(response.body);
         expect(response.body.article.article_id).toBe(4);
         expect(typeof response.body.article.title).toBe("string");
         expect(typeof response.body.article.topic).toBe("string");
@@ -206,6 +205,28 @@ describe("/api/articles/:article_id", () => {
     return request(app)
       .patch("/api/articles/3")
       .send(votesObj)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+});
+
+describe("/api/comments/:comment_id", () => {
+  test("DELETE:204 Returns no content with a 204 code", () => {
+    return request(app).delete("/api/comments/3").expect(204);
+  });
+  test("DELETE:404 Gives a 404 code with an comment not found message", () => {
+    return request(app)
+      .delete("/api/comments/369")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Comment not found!");
+      });
+  });
+  test("DELETE:400 Gives a 400 code with a bad request message", () => {
+    return request(app)
+      .delete("/api/comments/five")
       .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("Bad request");
