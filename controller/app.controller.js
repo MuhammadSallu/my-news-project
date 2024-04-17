@@ -6,6 +6,7 @@ const {
   postCommentByArticleId,
   updateArticleVotesById,
   deleteCommentById,
+  selectAllUsers,
 } = require("../model/app.model");
 const endpoints = require("../endpoints.json");
 
@@ -92,6 +93,12 @@ const removeCommentById = (req, res, next) => {
     .catch(next);
 };
 
+const getAllUsers = (req, res, next) => {
+  selectAllUsers().then((users) => {
+    res.status(200).send(users);
+  });
+};
+
 module.exports = {
   getTopics,
   getAll,
@@ -101,4 +108,5 @@ module.exports = {
   addCommentByArticleId,
   patchArticleVotesById,
   removeCommentById,
+  getAllUsers,
 };

@@ -74,6 +74,13 @@ const deleteCommentById = (id) => {
     });
 };
 
+const selectAllUsers = () => {
+  return db.query("SELECT * FROM users;").then(({ rows }) => {
+    console.log(rows);
+    return rows;
+  });
+};
+
 module.exports = {
   selectTopics,
   selectArticleById,
@@ -82,4 +89,5 @@ module.exports = {
   postCommentByArticleId,
   updateArticleVotesById,
   deleteCommentById,
+  selectAllUsers,
 };

@@ -233,3 +233,26 @@ describe("/api/comments/:comment_id", () => {
       });
   });
 });
+
+describe("/api/users", () => {
+  test("GET:200 Returns an array with all users", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        response.body.forEach((users) => {
+          expect(typeof users.username).toBe("string");
+          expect(typeof users.name).toBe("string");
+          expect(typeof users.avatar_url).toBe("string");
+        });
+      });
+  });
+  test("GET:404 Returns an error if path doesn't exist", () => {
+    return request(app)
+      .get("/api/sresu")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Endpoint not found!");
+      });
+  });
+});
