@@ -284,3 +284,37 @@ describe("/api/articles?topic=:topic", () => {
       });
   });
 });
+
+describe("/api/articles/:article_id?comment_count", () => {
+  test("GET:200 Gets comment count for a certain article by id", () => {
+    return request(app)
+      .get("/api/articles/5?comment_count=true")
+      .expect(200)
+      .then((response) => {
+        expect(typeof response.body.article_id).toBe("number");
+        expect(typeof response.body.author).toBe("string");
+        expect(typeof response.body.title).toBe("string");
+        expect(typeof response.body.topic).toBe("string");
+        expect(typeof response.body.created_at).toBe("string");
+        expect(typeof response.body.votes).toBe("number");
+        expect(typeof response.body.article_img_url).toBe("string");
+        expect(typeof response.body.comment_count).toBe("number");
+      });
+  });
+  test("GET:404 Gives an error if article id is valid but non existent", () => {
+    return request(app)
+      .get("/api/articles/500?comment_count")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Article doesn't exist!");
+      });
+  });
+  test("GET:400 Returns an error if id type is wrong", () => {
+    return request(app)
+      .get("/api/articles/An_Id?comment_count=true")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+});

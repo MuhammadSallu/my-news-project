@@ -21,6 +21,7 @@ app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 app.get("/api/users", getAllUsers);
 app.get("/api/articles?topic=:topic", getArticles);
+app.get("/api/articles/:article_id?:comment_count", getArticleById);
 app.post("/api/articles/:article_id/comments", addCommentByArticleId);
 app.patch("/api/articles/:article_id", patchArticleVotesById);
 app.delete("/api/comments/:comment_id", removeCommentById);

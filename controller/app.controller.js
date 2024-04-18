@@ -24,7 +24,8 @@ const getAll = (req, res, next) => {
 
 const getArticleById = (req, res, next) => {
   const { article_id } = req.params;
-  selectArticleById(article_id)
+  const { comment_count } = req.query;
+  selectArticleById(article_id, comment_count)
     .then((article) => {
       if (!article) {
         return Promise.reject({
