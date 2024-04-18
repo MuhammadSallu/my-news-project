@@ -7,7 +7,23 @@ const selectTopics = () => {
   });
 };
 
-const selectArticleById = (article_id) => {
+const selectArticleById = (article_id, comment_count) => {
+  if (comment_count) {
+    return db
+      .query(
+        `SELECT articles.*,
+      COUNT(comments.article_id)::INT AS comment_count
+      FROM articles
+      LEFT JOIN comments 
+      ON comments.article_id = $1
+      WHERE articles.article_id = $1
+      GROUP BY articles.article_id;`,
+        [article_id]
+      )
+      .then(({ rows }) => {
+        return rows[0];
+      });
+  }
   return db
     .query("SELECT * FROM articles WHERE article_id = $1;", [article_id])
     .then(({ rows }) => {
