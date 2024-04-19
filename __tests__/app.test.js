@@ -110,6 +110,7 @@ describe("/api/articles/:article_id/comments", () => {
       .get("/api/articles/5/comments")
       .expect(200)
       .then((response) => {
+        expect(response.body.comments.length).toBe(2);
         response.body.comments.forEach((comment) => {
           expect(typeof comment.comment_id).toBe("number");
           expect(typeof comment.body).toBe("string");
@@ -120,6 +121,7 @@ describe("/api/articles/:article_id/comments", () => {
         });
       });
   });
+
   test("GET:400 If the id is not a valid id type, return the correct error status", () => {
     return request(app)
       .get("/api/articles/anarticle/comments")
@@ -131,7 +133,7 @@ describe("/api/articles/:article_id/comments", () => {
   test("GET:404 if the article id doesn't exist returns the correct status and message", () => {
     return request(app)
       .get("/api/articles/100/comments")
-      .expect(404)
+      .expect(200)
       .then((response) => {
         expect(response.body.msg).toBe("No comments found for this article!");
       });

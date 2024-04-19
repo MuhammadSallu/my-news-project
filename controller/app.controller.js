@@ -7,8 +7,10 @@ const {
   updateArticleVotesById,
   deleteCommentById,
   selectAllUsers,
+  checkArticleById,
 } = require("../model/app.model");
 const endpoints = require("../endpoints.json");
+const model = require("../model/app.model");
 
 const getTopics = (req, res, next) => {
   selectTopics().then((topics) => {
@@ -27,6 +29,7 @@ const getArticleById = (req, res, next) => {
   const { comment_count } = req.query;
   selectArticleById(article_id, comment_count)
     .then((article) => {
+      model.isResolved = true;
       res.status(200).send(article);
     })
     .catch(next);
@@ -49,10 +52,15 @@ const getArticles = (req, res, next) => {
 
 const getCommentsByArticleId = (req, res, next) => {
   const { article_id } = req.params;
+  checkArticleById(article_id)
+    .then((articleExists) => {
+      model.checkArticle = articleExists;
+    })
+    .catch(next);
   selectCommentsByArticleId(article_id)
     .then((comments) => {
       if (comments.length === 0) {
-        res.status(404).send({ msg: "No comments found for this article!" });
+        res.status(200).send({ msg: "No comments found for this article!" });
       }
       res.status(200).send({ comments });
     })

@@ -1,10 +1,21 @@
 const db = require("../db/connection");
 const testData = require("../db/data/test-data/index");
-
+let checkArticle;
 const selectTopics = () => {
   return db.query("SELECT * FROM topics;").then((result) => {
     return result.rows;
   });
+};
+
+const checkArticleById = (article_id) => {
+  return db
+    .query(`SELECT * FROM articles WHERE article_id = $1;`, [article_id])
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        checkArticle = false;
+      } else checkArticle = true;
+      return checkArticle;
+    });
 };
 
 const selectArticleById = (article_id, comment_count) => {
@@ -113,4 +124,6 @@ module.exports = {
   updateArticleVotesById,
   deleteCommentById,
   selectAllUsers,
+  checkArticleById,
+  checkArticle,
 };
