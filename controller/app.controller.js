@@ -27,12 +27,6 @@ const getArticleById = (req, res, next) => {
   const { comment_count } = req.query;
   selectArticleById(article_id, comment_count)
     .then((article) => {
-      if (!article) {
-        return Promise.reject({
-          status: 404,
-          msg: "Article doesn't exist!",
-        });
-      }
       res.status(200).send(article);
     })
     .catch(next);

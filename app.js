@@ -11,7 +11,11 @@ const {
   removeCommentById,
   getAllUsers,
 } = require("./controller/app.controller");
-
+const {
+  handleCustomErrors,
+  handlePsqlErrors,
+  handleServerErrors,
+} = require("./errors/index");
 app.use(express.json());
 
 app.get("/api/topics", getTopics);
@@ -26,25 +30,9 @@ app.post("/api/articles/:article_id/comments", addCommentByArticleId);
 app.patch("/api/articles/:article_id", patchArticleVotesById);
 app.delete("/api/comments/:comment_id", removeCommentById);
 
-app.use((err, req, res, next) => {
-  switch (err.code) {
-    case "22P02":
-      res.status(400).send({ msg: "Bad request" });
-      break;
-    case "23503":
-      res.status(400).send({ msg: "Empty user!" });
-      break;
-  }
-  next(err);
-});
-
-app.use((err, req, res, next) => {
-  if (err.status && err.msg) {
-    res.status(err.status).send({ msg: err.msg });
-  }
-  next(err);
-});
-
+app.use(handlePsqlErrors);
+app.use(handleCustomErrors);
+app.use(handleServerErrors);
 app.all("*", (req, res, next) => {
   res.status(404).send({ msg: "Endpoint not found!" });
 });
