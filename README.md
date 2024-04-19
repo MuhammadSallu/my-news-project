@@ -35,19 +35,20 @@ To have this project run locally, please follow the installation guide below.
    npm i
    ```
 3. Create two .env files in the root directory to get this project to work: .env.test and .env.development.
-   .env.test should contain:
+
+   .env.test:
 
    ```sh
    PGDATABASE=nc_news_test
    ```
 
-   .env.development
+   .env.development:
 
    ```sh
    PGDATABASE=nc_news
    ```
 
-4. Create the databases, in the terminal type:
+5. Create the databases, in the terminal type:
 
 ```sh
 npm run setup-dbs
