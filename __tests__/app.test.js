@@ -86,7 +86,11 @@ describe("/api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then((response) => {
+        expect(response.body.articles).toBeSortedBy("created_at", {
+          descending: true,
+        });
         response.body.articles.forEach((article) => {
+          expect(article.body).toBe(undefined);
           expect(typeof article.article_id).toBe("number");
           expect(typeof article.author).toBe("string");
           expect(typeof article.title).toBe("string");
