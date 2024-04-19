@@ -16,11 +16,11 @@ describe("/api/topics", () => {
       .get("/api/topics")
       .expect(200)
       .then((response) => {
-        expect(response.body.length).toBe(testData.topicData.length);
-        expect(response.body).toEqual(testData.topicData);
+        expect(response.body.topics.length).toBe(testData.topicData.length);
+        expect(response.body.topics).toEqual(testData.topicData);
       });
   });
-  test("GET:404 Gives a message if endpoint doesn't exist", () => {
+  test("GET:404 Gives a message if the endpoint doesn't exist", () => {
     return request(app)
       .get("/api/topivs")
       .expect(404)
