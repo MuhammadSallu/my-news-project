@@ -26,8 +26,7 @@ const getAll = (req, res, next) => {
 
 const getArticleById = (req, res, next) => {
   const { article_id } = req.params;
-  const { comment_count } = req.query;
-  selectArticleById(article_id, comment_count)
+  selectArticleById(article_id)
     .then((article) => {
       model.isResolved = true;
       res.status(200).send(article);
