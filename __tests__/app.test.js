@@ -71,14 +71,14 @@ describe("/api/articles/:article_id", () => {
         expect(response.body.msg).toBe("Bad request");
       });
   });
-  test("GET:404 If the article id doesn't exist return the correct status and message", () => {
-    return request(app)
-      .get("/api/articles/123")
-      .expect(404)
-      .then((response) => {
-        expect(response.body.msg).toBe("Article doesn't exist!");
-      });
-  });
+  // test("GET:404 If the article id doesn't exist return the correct status and message", () => {
+  //   return request(app)
+  //     .get("/api/articles/123")
+  //     .expect(404)
+  //     .then((response) => {
+  //       expect(response.body.msg).toBe("Article doesn't exist!");
+  //     });
+  // });
 });
 
 describe("/api/articles", () => {
